@@ -1,0 +1,132 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { UrlListService } from '../lib/urlListService';
+
+// Fetch all published URL lists
+const publishedLists = await UrlListService.getAll().then(lists => 
+  lists.filter(list => list.is_published)
+);
+---
+
+<Layout title="Discover URL Lists - The Urlist">
+  <div class="space-y-8">
+    <!-- Header -->
+    <section class="text-center py-8">
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        Discover Published Lists
+      </h1>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        Explore curated URL collections shared by our community. Find resources, 
+        bookmarks, and link collections on various topics.
+      </p>
+    </section>
+
+    <!-- Stats -->
+    <section class="bg-gray-50 rounded-lg p-6">
+      <div class="text-center">
+        <div class="text-3xl font-bold text-blue-600 mb-2">
+          {publishedLists.length}
+        </div>
+        <div class="text-gray-600">
+          Published Lists Available
+        </div>
+      </div>
+    </section>
+
+    <!-- Published Lists Grid -->
+    {publishedLists.length > 0 ? (
+      <section>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {publishedLists.map((urlList) => (
+            <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6 hover:shadow-lg transition-shadow">
+              <div class="mb-4">
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                  <a 
+                    href={`/share/${urlList.slug}`}
+                    class="hover:text-blue-600 transition-colors"
+                  >
+                    {urlList.title}
+                  </a>
+                </h3>
+                {urlList.description && (
+                  <p class="text-gray-600 text-sm line-clamp-3">
+                    {urlList.description}
+                  </p>
+                )}
+              </div>
+
+              <div class="text-sm text-gray-500 mb-4">
+                <div class="flex items-center justify-between">
+                  <span>Slug:</span>
+                  <code class="text-blue-600 bg-blue-50 px-2 py-1 rounded text-xs">
+                    {urlList.slug}
+                  </code>
+                </div>
+                <div class="flex items-center justify-between mt-2">
+                  <span>Created:</span>
+                  <span>{new Date(urlList.created_at).toLocaleDateString()}</span>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between">
+                <a
+                  href={`/share/${urlList.slug}`}
+                  class="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                >
+                  View Public List →
+                </a>
+                <a
+                  href={`/lists/${urlList.id}`}
+                  class="text-gray-500 hover:text-gray-700 text-sm"
+                >
+                  View Details
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    ) : (
+      <section class="text-center py-12">
+        <div class="text-6xl mb-4">📭</div>
+        <h2 class="text-2xl font-semibold text-gray-900 mb-4">
+          No Published Lists Yet
+        </h2>
+        <p class="text-gray-600 mb-8">
+          Be the first to create and publish a URL list for the community to discover!
+        </p>
+        <a
+          href="/create"
+          class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          Create Your First List
+        </a>
+      </section>
+    )}
+
+    <!-- Call to Action -->
+    <section class="bg-blue-50 rounded-lg p-8 text-center">
+      <h2 class="text-2xl font-bold text-gray-900 mb-4">
+        Want to Share Your Own List?
+      </h2>
+      <p class="text-gray-600 mb-6">
+        Create curated URL collections and share them with the world. 
+        Choose a custom slug and make your links easily discoverable.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href="/create"
+          class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          Create a List
+        </a>
+        <a
+          href="/dashboard"
+          class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          View Dashboard
+        </a>
+      </div>
+    </section>
+  </div>
+</Layout>

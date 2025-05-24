@@ -1,0 +1,44 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CreateUrlListForm from '../components/CreateUrlListForm.tsx';
+---
+
+<Layout title="Create New List - The Urlist">
+  <div class="space-y-8">
+    <!-- Header -->
+    <div class="text-center">
+      <h1 class="text-3xl font-bold text-gray-900">Create New URL List</h1>
+      <p class="text-gray-600 mt-2">
+        Start building your curated collection of URLs with a custom slug
+      </p>
+    </div>
+
+    <!-- Form -->
+    <CreateUrlListForm client:load />
+
+    <!-- Help Section -->
+    <div class="max-w-2xl mx-auto">
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+        <h3 class="text-lg font-medium text-blue-900 mb-3">💡 Tips for creating great URL lists</h3>
+        <ul class="space-y-2 text-sm text-blue-800">
+          <li class="flex items-start">
+            <span class="flex-shrink-0 w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3"></span>
+            <span>Choose a descriptive title that clearly explains what your list contains</span>
+          </li>
+          <li class="flex items-start">
+            <span class="flex-shrink-0 w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3"></span>
+            <span>Use a memorable slug - this will be part of your shareable URL</span>
+          </li>
+          <li class="flex items-start">
+            <span class="flex-shrink-0 w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3"></span>
+            <span>Add a detailed description to help others understand the purpose of your list</span>
+          </li>
+          <li class="flex items-start">
+            <span class="flex-shrink-0 w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3"></span>
+            <span>You can add URLs after creating the list and publish it when ready</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</Layout>

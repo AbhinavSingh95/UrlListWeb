@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "urlist-web",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -9,8 +9,20 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.1.7",
+    "@astrojs/react": "^4.0.0",
+    "@astrojs/tailwind": "^5.1.2",
+    "@types/pg": "^8.11.6",
     "astro": "^5.8.0",
-    "tailwindcss": "^4.1.7"
+    "nanostores": "^0.10.3",
+    "@nanostores/react": "^0.7.3",
+    "pg": "^8.12.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^3.4.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1"
   }
 }

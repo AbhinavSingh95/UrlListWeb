@@ -1,0 +1,89 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { UrlListService } from '../lib/urlListService';
+import DashboardGrid from '../components/DashboardGrid.tsx';
+
+// Fetch all URL lists for the dashboard
+const urlLists = await UrlListService.getAll();
+---
+
+<Layout title="Dashboard - The Urlist">
+  <div class="space-y-8">
+    <!-- Header -->
+    <div class="flex justify-between items-center">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
+        <p class="text-gray-600 mt-1">Manage your URL lists</p>
+      </div>
+      <a
+        href="/create"
+        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
+        Create New List
+      </a>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <div class="text-2xl">📝</div>
+            </div>
+            <div class="ml-5 w-0 flex-1">
+              <dl>
+                <dt class="text-sm font-medium text-gray-500 truncate">Total Lists</dt>
+                <dd class="text-lg font-medium text-gray-900">{urlLists.length}</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <div class="text-2xl">🌍</div>
+            </div>
+            <div class="ml-5 w-0 flex-1">
+              <dl>
+                <dt class="text-sm font-medium text-gray-500 truncate">Published</dt>
+                <dd class="text-lg font-medium text-gray-900">
+                  {urlLists.filter(list => list.is_published).length}
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <div class="text-2xl">🔒</div>
+            </div>
+            <div class="ml-5 w-0 flex-1">
+              <dl>
+                <dt class="text-sm font-medium text-gray-500 truncate">Private</dt>
+                <dd class="text-lg font-medium text-gray-900">
+                  {urlLists.filter(list => !list.is_published).length}
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- URL Lists -->
+    <div>
+      <DashboardGrid 
+        urlLists={urlLists} 
+        client:load
+      />
+    </div>
+  </div>
+</Layout>

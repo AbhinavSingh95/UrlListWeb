@@ -1,0 +1,222 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { UrlListService } from '../../lib/urlListService';
+import { UrlService } from '../../lib/urlService';
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect('/');
+}
+
+// Find the URL list by slug
+const allLists = await UrlListService.getAll();
+const urlList = allLists.find(list => list.slug === slug && list.is_published);
+
+if (!urlList) {
+  return Astro.redirect('/');
+}
+
+// Fetch URLs for this list
+const urls = await UrlService.getByListId(urlList.id);
+
+const pageTitle = `${urlList.title} - The Urlist`;
+const pageDescription = urlList.description || `Discover the ${urlList.title} URL collection`;
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <div class="space-y-8">
+    <!-- Header -->
+    <div class="text-center bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-8 border border-blue-100">
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">{urlList.title}</h1>
+      {urlList.description && (
+        <p class="text-xl text-gray-600 mb-6 max-w-3xl mx-auto">{urlList.description}</p>
+      )}
+      
+      <div class="flex flex-wrap justify-center items-center gap-6 text-sm text-gray-500">
+        <div class="flex items-center">
+          <span class="text-blue-600 mr-2">🔗</span>
+          <span>{urls.length} URL{urls.length !== 1 ? 's' : ''}</span>
+        </div>
+        <div class="flex items-center">
+          <span class="text-blue-600 mr-2">📅</span>
+          <span>
+            Created {new Date(urlList.created_at).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            })}
+          </span>
+        </div>
+        <div class="flex items-center">
+          <span class="text-blue-600 mr-2">🏷️</span>
+          <code class="text-blue-700 bg-blue-100 px-2 py-1 rounded text-xs">
+            {urlList.slug}
+          </code>
+        </div>
+      </div>
+    </div>
+
+    <!-- URLs Display -->
+    {urls.length === 0 ? (
+      <div class="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
+        <div class="text-gray-400 text-6xl mb-4">🔗</div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">No URLs in this list yet</h3>
+        <p class="text-gray-500">The list owner hasn't added any URLs yet.</p>
+      </div>
+    ) : (
+      <div class="space-y-4">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">
+          URLs ({urls.length})
+        </h2>
+        
+        <div class="space-y-4">
+          {urls.map((url, index) => (
+            <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+              <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-800 text-sm font-bold flex items-center justify-center rounded-full">
+                  {index + 1}
+                </div>
+                
+                <div class="flex-1 min-w-0">
+                  <div class="mb-2">
+                    <a
+                      href={url.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-lg font-semibold text-blue-600 hover:text-blue-800 break-words"
+                    >
+                      {url.title || url.url}
+                      <span class="inline-block ml-2 text-gray-400">
+                        <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                      </span>
+                    </a>
+                  </div>
+                  
+                  {url.title && (
+                    <p class="text-sm text-gray-600 mb-2 font-mono break-all">
+                      {url.url}
+                    </p>
+                  )}
+                  
+                  {url.description && (
+                    <p class="text-gray-700">
+                      {url.description}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Actions -->
+    <div class="flex flex-col sm:flex-row justify-center items-center gap-4 pt-8 border-t border-gray-200">
+      <a
+        href="/"
+        class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
+        🏠 Back to Home
+      </a>
+      
+      <a
+        href="/create"
+        class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
+        ✨ Create Your Own List
+      </a>
+    </div>
+
+    <!-- Share Section -->
+    <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">Share this list</h3>
+      
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Direct Link</label>
+          <div class="flex">
+            <input
+              type="text"
+              value={Astro.url.href}
+              readonly
+              class="flex-1 px-3 py-2 border border-gray-300 rounded-l-md bg-gray-50 text-gray-900 text-sm font-mono"
+              id="shareUrl"
+            />
+            <button
+              onclick="copyToClipboard()"
+              class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-r-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              Copy
+            </button>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <a
+            href={`https://twitter.com/intent/tweet?text=Check out this URL list: ${encodeURIComponent(urlList.title)}&url=${encodeURIComponent(Astro.url.href)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center justify-center px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50"
+          >
+            🐦 Twitter
+          </a>
+          
+          <a
+            href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(Astro.url.href)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center justify-center px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50"
+          >
+            💼 LinkedIn
+          </a>
+          
+          <a
+            href={`https://www.reddit.com/submit?url=${encodeURIComponent(Astro.url.href)}&title=${encodeURIComponent(urlList.title)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center justify-center px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50"
+          >
+            🤖 Reddit
+          </a>
+          
+          <a
+            href={`mailto:?subject=${encodeURIComponent(urlList.title)}&body=Check out this URL list: ${encodeURIComponent(Astro.url.href)}`}
+            class="flex items-center justify-center px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50"
+          >
+            📧 Email
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function copyToClipboard() {
+      const urlInput = document.getElementById('shareUrl');
+      urlInput.select();
+      urlInput.setSelectionRange(0, 99999); // For mobile devices
+      
+      try {
+        document.execCommand('copy');
+        // Show feedback
+        const button = event.target;
+        const originalText = button.textContent;
+        button.textContent = 'Copied!';
+        button.classList.add('bg-green-600');
+        button.classList.remove('bg-blue-600');
+        
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.classList.remove('bg-green-600');
+          button.classList.add('bg-blue-600');
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy: ', err);
+      }
+    }
+  </script>
+</Layout>

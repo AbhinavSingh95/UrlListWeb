@@ -1,0 +1,12 @@
+{
+    "servers": {
+        "postgres_urllist": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-postgres",
+                "postgresql://urlist_user:urlist_password@localhost:5432/urlist_db"
+            ]
+        }
+    }
+}

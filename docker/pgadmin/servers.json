@@ -1,0 +1,14 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "Urlist Development DB",
+      "Group": "Servers",
+      "Host": "postgres",
+      "Port": 5432,
+      "MaintenanceDB": "urlist_db",
+      "Username": "urlist_user",
+      "PassFile": "/tmp/pgpassfile",
+      "SSLMode": "prefer"
+    }
+  }
+}

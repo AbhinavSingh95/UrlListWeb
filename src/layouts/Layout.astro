@@ -1,22 +1,92 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+export interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+}
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+const { 
+  title, 
+  description = "Create, manage, and share curated lists of URLs with custom slugs. Perfect for resource collections, bookmarks, and link sharing.",
+  image = "/favicon.svg",
+  type = "website"
+} = Astro.props;
+
+// Handle canonical URL safely for development and production
+const baseURL = Astro.site?.href || 'http://localhost:4321';
+const canonicalURL = new URL(Astro.url.pathname, baseURL);
+const fullImageURL = new URL(image, baseURL);
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonicalURL} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={fullImageURL} />
+    <meta property="og:site_name" content="The Urlist" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={fullImageURL} />
+    
+    <!-- Additional SEO -->
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="The Urlist" />
+    
+    <title>{title}</title>
+  </head>
+  <body class="min-h-screen bg-gray-50">
+    <header class="bg-white shadow-sm border-b">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex items-center">
+            <a href="/" class="text-xl font-bold text-gray-900">
+              The Urlist
+            </a>
+          </div>
+          <nav class="flex space-x-8">
+            <a href="/" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+              Home
+            </a>
+            <a href="/discover" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+              Discover
+            </a>
+            <a href="/dashboard" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+              Dashboard
+            </a>
+            <a href="/create" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+              Create List
+            </a>
+          </nav>
+        </div>
+      </div>
+    </header>
+    
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <slot />
+    </main>
+    
+    <footer class="bg-white border-t mt-auto">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="text-center text-gray-500 text-sm">
+          © 2024 The Urlist. Built with Astro, React, and Tailwind CSS.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

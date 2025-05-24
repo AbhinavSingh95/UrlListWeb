@@ -1,0 +1,36 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Page Not Found - The Urlist">
+  <div class="text-center py-16">
+    <div class="text-6xl mb-8">🔍</div>
+    <h1 class="text-4xl font-bold text-gray-900 mb-4">Page Not Found</h1>
+    <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+      Sorry, the page you're looking for doesn't exist. It might have been moved, deleted, or you may have mistyped the URL.
+    </p>
+    
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a
+        href="/"
+        class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
+        🏠 Go Home
+      </a>
+      
+      <a
+        href="/dashboard"
+        class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
+        📝 View Dashboard
+      </a>
+      
+      <a
+        href="/create"
+        class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
+        ✨ Create List
+      </a>
+    </div>
+  </div>
+</Layout>
