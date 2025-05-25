@@ -12,6 +12,24 @@ A modern web application for creating, managing, and sharing curated lists of UR
 🔍 **SEO Optimized** - Proper meta tags and structured data for search engines  
 ⚡ **Fast & Modern** - Built with cutting-edge web technologies for optimal performance
 
+## 📸 Application Screenshots
+
+### 🏠 Homepage - Welcome & Discovery
+![Homepage](assets/landingPage.png)
+*Clean, modern landing page with feature highlights and published lists showcase*
+
+### 📊 Dashboard - Personal Overview
+![Dashboard](assets/dashboardPage.png)
+*Comprehensive dashboard with statistics and quick access to all your URL lists*
+
+### ✨ Create Lists - Simple & Intuitive
+![Create List Page](assets/createListPage.png)
+*Streamlined list creation with custom slug validation and rich text descriptions*
+
+### 🔍 Discover - Browse Public Lists
+![Discover Page](assets/discoverPage.png)
+*Explore and discover curated URL collections shared by the community*
+
 ## 🤖 AI-Assisted Development
 
 This project was developed with the assistance of **Claude Sonnet 3.7** and leverages modern AI development practices to ensure high-quality, maintainable code.
